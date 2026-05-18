@@ -24,7 +24,7 @@ export default function RegisterPage() {
     return (
         <div style={styles.wrapper}>
             <div style={styles.card}>
-                <h2 style={styles.title}>Create Account</h2>
+                <h2 style={styles.title}>Creat Account</h2>
 
                 <form onSubmit={handleRegister} style={styles.form}>
                     <input
