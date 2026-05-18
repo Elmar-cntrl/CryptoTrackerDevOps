@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "t2tAbXWqdT35+JxHFMbYj77e7iVrzYKZfL4pdf6CYtI=",
+  "Source": "CryptoTracker.Api",
+  "BasePath": "_content/CryptoTracker.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

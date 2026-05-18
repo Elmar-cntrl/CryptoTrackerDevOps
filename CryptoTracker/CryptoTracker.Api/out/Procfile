@@ -1,0 +1,1 @@
+web: chmod +x ./CryptoTracker.Api && ./CryptoTracker.Api --urls http://0.0.0.0:5000

@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: crypto-tracker-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong@Pass123"
+    ports:
+      - "1433:1433"
+
+  backend:
+    build:
+      context: ./CryptoTracker
+    image: elmarhub/crypto-tracker-backend:latest
+    container_name: crypto-tracker-backend
+    ports:
+      - "5076:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=CryptoTrackerDb;User Id=sa;Password=YourStrong@Pass123;TrustServerCertificate=True;"
+      Jwt__Key: "SUPER_SECRET_KEY_123456789_SUPER_SECRET_KEY_123456789"
+      Jwt__Issuer: "CryptoTracker"
+      Jwt__Audience: "CryptoTrackerUsers"
+      Jwt__ExpireDays: "7"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./crypto-tracker-ui
+    image: elmarhub/crypto-tracker-frontend:latest
+    container_name: crypto-tracker-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
