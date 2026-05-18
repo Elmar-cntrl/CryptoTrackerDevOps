@@ -1,0 +1,45 @@
+name: CI/CD Docker AWS Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build backend image
+        run: docker build -t elmarhub/crypto-tracker-backend:latest ./CryptoTracker
+
+      - name: Build frontend image
+        run: docker build -t elmarhub/crypto-tracker-frontend:latest ./crypto-tracker-ui
+
+      - name: Push backend image
+        run: docker push elmarhub/crypto-tracker-backend:latest
+
+      - name: Push frontend image
+        run: docker push elmarhub/crypto-tracker-frontend:latest
+
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          script: |
+            cd ~/cryptotracker
+            sudo docker compose pull
+            sudo docker compose down
+            sudo docker compose up -d
+            sudo docker image prune -f
